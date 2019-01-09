@@ -14,6 +14,8 @@ int LEDpin = 6;
 boolean trigger = false;
 boolean last_trigger = false;
 
+int state;
+
 boolean fadeIn;
 int brightness;
 int inc = 5;
@@ -24,16 +26,18 @@ void setup() {
   Serial.begin(9600);
 
   pinMode(LEDpin, OUTPUT);
+  // set the pin with the sensor as input
+  pinMode(3, INPUT);
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-  // read the input on analog pin 0:
-  int sensorValue = analogRead(A0);
+  // read the input on digital pin 3. 
+  int sensorValue = digitalRead(3);
 
 
 
-  if (sensorValue > 500 ) {
+  if (sensorValue == 1 ) {
     // if sensorValue is above certain amount, trigger is true
     trigger = true;
   }
@@ -42,16 +46,18 @@ void loop() {
     trigger = false;
   }
 
+// if triggered the first time
   if (trigger == true && last_trigger == false) {
-    // change the fade direction
-    fadeIn = !fadeIn;
+    state = state +1;
+    state = state %2;
   }
 
-  if (fadeIn) {
-    // if fade in, then increment is +5
+  if (state == 1) {
+    // if state is 1, then increment is +5
     inc = 5;
-  } else {
-    // if fade out, then increment is -5
+  } 
+  if (state == 0) {
+    // if state is 0, then increment is -5
     inc = -5;
   }
 
@@ -79,7 +85,7 @@ void loop() {
   Serial.print("\t ");
   Serial.print(0);
   Serial.print(" ");
-  Serial.print(1023);
+  Serial.print(1);
 
   // Carriage return
   Serial.println();

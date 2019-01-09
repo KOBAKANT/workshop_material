@@ -7,12 +7,11 @@
 
 #define BRIGHTNESS  128
 #define FRAMES_PER_SECOND 60
+
 CRGB leds[NUM_LEDS];
 
-boolean trigger = false;
-boolean last_trigger = false;
 
-boolean fade;
+boolean fadeIn;
 int brightness;
 int inc = 5;
 
@@ -21,6 +20,7 @@ void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
 
+  // initialize the Neo Pixel
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);
   FastLED.show();
   delay(200);
@@ -33,17 +33,17 @@ void loop() {
 
 
 
-  if (sensorValue > 500 ) {
+   if (sensorValue > 500 ) {
     // if sensorValue is above certain amount, trigger is true
-    fade = true;
+    fadeIn = true;
   }
   else {
     // else trigger is false
-    fade = false;
+    fadeIn = false;
   }
 
 
-  if (fade) {
+  if (fadeIn) {
     // if fade in, then increment is +5
     inc = 5;
   } else {
@@ -68,7 +68,7 @@ FastLED.show();
   Serial.print("sensorValue: ");
   Serial.print(sensorValue);
   Serial.print("\t fade state: ");
-  Serial.print(fade);
+  Serial.print(fadeIn);
   Serial.print("\t brightness: ");
   Serial.print(brightness);
 

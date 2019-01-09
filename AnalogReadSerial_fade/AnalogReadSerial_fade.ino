@@ -11,10 +11,9 @@
 */
 
 int LEDpin = 6;
-boolean trigger = false;
-boolean last_trigger = false;
 
-boolean fade;
+
+boolean fadeIn;
 int brightness;
 int inc = 5;
 
@@ -35,15 +34,15 @@ void loop() {
 
   if (sensorValue > 500 ) {
     // if sensorValue is above certain amount, trigger is true
-    fade = true;
+    fadeIn = true;
   }
   else {
     // else trigger is false
-    fade = false;
+    fadeIn = false;
   }
 
 
-  if (fade) {
+  if (fadeIn) {
     // if fade in, then increment is +5
     inc = 5;
   } else {
@@ -65,7 +64,7 @@ void loop() {
   Serial.print("sensorValue");
   Serial.print(sensorValue);
   Serial.print("\t fade state: ");
-  Serial.print(fade);
+  Serial.print(fadeIn);
   Serial.print("\t brightness: ");
   Serial.print(brightness);
 

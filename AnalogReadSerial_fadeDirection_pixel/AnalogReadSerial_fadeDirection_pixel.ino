@@ -13,7 +13,7 @@ CRGB leds[NUM_LEDS];
 boolean trigger = false;
 boolean last_trigger = false;
 
-boolean fade;
+boolean fadeIn;
 int brightness;
 int inc = 5;
 
@@ -45,10 +45,10 @@ void loop() {
 
   if (trigger == true && last_trigger == false) {
     // change the fade direction
-    fade = !fade;
+    fadeIn = !fadeIn;
   }
 
-  if (fade) {
+  if (fadeIn) {
     // if fade in, then increment is +5
     inc = 5;
   } else {
@@ -79,7 +79,7 @@ void loop() {
   Serial.print("sensorValue: ");
   Serial.print(sensorValue);
   Serial.print("\t fade state: ");
-  Serial.print(fade);
+  Serial.print(fadeIn);
   Serial.print("\t brightness: ");
   Serial.print(brightness);
 
