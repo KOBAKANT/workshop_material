@@ -1,7 +1,7 @@
+
 #include <FastLED.h>
 
 #define LED_PIN     6
-#define LED2_PIN     8
 #define COLOR_ORDER GRB
 #define CHIPSET     WS2812
 #define NUM_LEDS    4
@@ -9,50 +9,41 @@
 #define BRIGHTNESS  128
 #define FRAMES_PER_SECOND 60
 CRGB leds[NUM_LEDS];
-CRGB leds2[NUM_LEDS];
 
+int sensorValue;
+int brightness;
 
-int brightness = 0;
 
 // the setup routine runs once when you press reset:
 void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
-  
+
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);
-  FastLED.addLeds<NEOPIXEL, LED2_PIN>(leds2, NUM_LEDS);
   FastLED.show();
   delay(200);
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-  // read the input on analog pin 0:
-  int sensorValue = analogRead(A10);
+  // read the input on analog pin 10:
+  sensorValue = analogRead(A10);
 
-  // if sensorValue is 0 turn on the light
-if ( sensorValue >500  ){
-  // turn on the light
-  brightness = brightness + 5;
-}
+  // map the minimum (i.e 200) and maximum (i.e 700) of sensorValue to brightness (0-255).
+  brightness = map (sensorValue, 200, 700, 0, 255);
 
-  // if not, turn off the light
-else{
-  // turn off the light
-  brightness = brightness - 5;
-}
+  // make sure that the brightness does not go out of the range (0-255)
+  brightness = constrain (brightness, 0, 255);
 
-  brightness= constrain(brightness, 0,255);
-
-  // control the leds, (Hue, Saturation, Value/brightness)
+    // control the leds, (Hue, Saturation, Value/brightness)
   leds[0] = CHSV( 255, 255, brightness);
 
+  // send the color information to LEDs
   FastLED.show();
 
-
-
+  
   // print out the value you read and mapped brightness value:
-  Serial.print("sensorValue: ");
+  Serial.print("sensorValue");
   Serial.print(sensorValue);
   Serial.print("\t brightness: ");
   Serial.print(brightness);
@@ -66,6 +57,6 @@ else{
   // Carriage return
   Serial.println();
 
-  delay(5);        // delay in between reads for stability
+  delay(10);        // delay in between reads for stability
 
 }
